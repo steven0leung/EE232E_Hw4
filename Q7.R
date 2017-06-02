@@ -84,13 +84,32 @@ for( i in 1 : (length(co_names)-1) ) {
 }
 
 g1 = graph.data.frame(P.data,directed = FALSE)
+g1_mst = mst(g1 , weights = P.data$weights) # create minimal spanning tree
+
+nodes = V(g1)$name # vector of all nodes
+sectors = ticker$Sector # vector of all sectors 
+u_sectors = unique(sectors)
+
+node_cols = rep(0,length(nodes))
+col_id = 1
+for(i in u_sectors){
+  node_cols[which(sectors == i)] = col_id #identify colors to unique sectors
+  col_id = col_id + 1
+}
+
 
 cat("Number of nodes in the network (Using only Monday data) : ",length(V(g1)),"\n")
 cat("Number of edges in the network (Using only Monday data) : ",length(E(g1)),"\n")
 
+# plot MST of modified graph
+plot(g1_mst, vertex.color = node_cols ,
+     vertex.size = rep(7,length(nodes)) , 
+     vertex.label = NA, 
+     main = "Modified Minimal Spanning Tree (Monday Data)" )
+
 # Hist of un-modified P_ij's 
 hist( x= tot_P_ij, breaks = seq(from = min(tot_P_ij), to = max(tot_P_ij), by = (max(tot_P_ij)-min(tot_P_ij))/50), 
-      main = "Histogram of Un-modified P_ij's (Using only Monday Data)", xlab = "d_ij Value", ylab = "Frequency")
+      main = "Histogram of Un-modified P_ij's (Using only Monday Data)", xlab = "P_ij Value", ylab = "Frequency")
 
 # Hist of d_ij calculated from modified P_ij
 hist( x= tot_d_ij, breaks = seq(from = min(tot_d_ij), to = max(tot_d_ij), by = (max(tot_d_ij)-min(tot_d_ij))/50), 
