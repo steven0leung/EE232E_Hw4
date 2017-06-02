@@ -132,3 +132,6 @@ colnames(sector_clustering_results) = c("Alpha","Random Sector")
 
 ############## Question 5 ##############
 cat("\n \n ############## Question 5 ############## \n")
+temp = as.directed(g1_mst, 'mutual')
+g1_double_mst = as.undirected(temp, 'each' )
+
