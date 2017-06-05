@@ -18,10 +18,13 @@ def main():
         for i in tour:
             if i not in tsp:
                 tsp.append(i)
-        print (tsp)
         tsp.append(0)
 
         print tsp
+
+        thefile = open('tsp.txt', 'w')
+        for item in tsp:
+          print>>thefile, item + 1
 
 if __name__ == '__main__':
         main()

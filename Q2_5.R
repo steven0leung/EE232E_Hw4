@@ -132,6 +132,11 @@ colnames(sector_clustering_results) = c("Alpha","Random Sector")
 
 ############## Question 5 ##############
 cat("\n \n ############## Question 5 ############## \n")
-temp = as.directed(g1_mst, 'mutual')
-g1_double_mst = as.undirected(temp, 'each' )
+g1_mst_dir = as.directed(g1_mst, 'mutual')
+g1_double_mst = as.undirected(g1_mst_dir, 'each' )
 
+el = get.edgelist(g1_double_mst)
+v3 = as.vector(E(g1_double_mst)$weights)
+out = cbind(el, v3)
+
+write.csv(out, file = "double_mst.csv",row.names=FALSE)
