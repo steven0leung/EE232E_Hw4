@@ -97,10 +97,10 @@ g1_mst = mst(g1 , weights = P.data$weights) # create minimal spanning tree
 cat("Number of nodes in the network: ",length(V(g1_mst)),"\n") # as a sanity check
 cat("Number of edges in the network: ",length(E(g1_mst)),"\n")
 
-plot(g1, vertex.color = node_cols, 
-      vertex.size = rep(7,length(nodes)),
-      vertex.label = NA,
-      main = "Correlations Graph" ) # correlation graph
+#plot(g1, vertex.color = node_cols, 
+#      vertex.size = rep(7,length(nodes)),
+#      vertex.label = NA,
+#      main = "Correlations Graph" ) # correlation graph
 
 plot(g1_mst, vertex.color = node_cols ,
      vertex.size = rep(7,length(nodes)) , 
@@ -132,3 +132,38 @@ colnames(sector_clustering_results) = c("Alpha","Random Sector")
 
 ############## Question 5 ##############
 cat("\n \n ############## Question 5 ############## \n")
+g1_mst_dir = as.directed(g1_mst, 'mutual')
+g1_double_mst = as.undirected(g1_mst_dir, 'each' )
+
+el = get.edgelist(g1_double_mst)
+v3 = as.vector(E(g1_double_mst)$weights)
+out = cbind(el, v3)
+
+#Exporting the graph to python to fine Euler Tour
+write.csv(out, file = "double_mst.csv",row.namames=FALSE)
+
+#Read in the results from python
+tsp_python = read.table('tsp.txt')
+tsp_path_names = as.vector(tsp_python[,1])
+
+node_names = V(g1)$name
+tsp_path_idx = numeric()
+for(i in 1:length(tsp_path_names)){
+  matches = which(tsp_path_names[i] == node_names)
+  tsp_path_idx = c(tsp_path_idx,matches)
+}
+
+adjacency_matrix = get.adjacency(g1, attr = 'weights',sparse = FALSE, names = FALSE)
+
+#Calculate weight of travelling salesman path
+tsp_weight = 0
+for(i in 2:length(tsp_path_idx)){
+  tsp_weight = tsp_weight + adjacency_matrix[tsp_path_idx[i],tsp_path_idx[i-1]]
+}
+
+lower_bound = sum(E(g1_mst)$weights)
+upper_bound = sum(E(g1_double_mst)$weights)
+
+cat("Sum of weights of min spanning tree: ",lower_bound,"\n")
+cat("Sum of weights of double min spanning tree: ",upper_bound,"\n")
+cat("Sum of edge weights of TSP solution: ", tsp_weight,"\n")
