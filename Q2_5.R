@@ -97,10 +97,10 @@ g1_mst = mst(g1 , weights = P.data$weights) # create minimal spanning tree
 cat("Number of nodes in the network: ",length(V(g1_mst)),"\n") # as a sanity check
 cat("Number of edges in the network: ",length(E(g1_mst)),"\n")
 
-#plot(g1, vertex.color = node_cols, 
-#      vertex.size = rep(7,length(nodes)),
-#      vertex.label = NA,
-#      main = "Correlations Graph" ) # correlation graph
+plot(g1, vertex.color = node_cols,
+     vertex.size = rep(7,length(nodes)),
+     vertex.label = NA,
+     main = "Correlations Graph" ) # correlation graph
 
 plot(g1_mst, vertex.color = node_cols ,
      vertex.size = rep(7,length(nodes)) , 
