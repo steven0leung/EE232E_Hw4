@@ -140,3 +140,5 @@ v3 = as.vector(E(g1_double_mst)$weights)
 out = cbind(el, v3)
 
 write.csv(out, file = "double_mst.csv",row.names=FALSE)
+
+tsp = as.vector(read.table('tsp.txt'))
